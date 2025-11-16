@@ -32,4 +32,29 @@
         }
 
     }
+
+    // Waybill Printer Factory
+    public enum WaybillTypeEnum
+    {
+        PDF = 1,
+        Excel,
+        Word
+    }
+
+    // Factory Class, which creates Waybill Printers based on the WaybillType enum
+    public class  WaybillTypeFactory
+    {
+        private Dictionary<int, Func<IWaybillPrinter>> _map = new()
+        {
+            { (int)WaybillTypeEnum.PDF, () => new PDFWaybillPrinter() },
+            { (int)WaybillTypeEnum.Excel, () => new ExcelWaybillPrinter() },
+            { (int)WaybillTypeEnum.Word, () => new WordWaybillPrinter() },
+        };
+
+        public IWaybillPrinter Create(int waybillPrinter)
+        {
+            return _map[waybillPrinter]();
+        }
+    }
+
 }

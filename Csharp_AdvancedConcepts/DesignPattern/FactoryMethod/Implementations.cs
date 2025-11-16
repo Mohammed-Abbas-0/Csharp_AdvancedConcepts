@@ -15,4 +15,21 @@
         public void Deliver() => Console.WriteLine("Delivering by truck...");
     }
 
+
+    #region Waybill Printers
+
+    public class PDFWaybillPrinter : IWaybillPrinter
+    {
+        public void Print() => Console.WriteLine("Printing waybill in PDF format...");
+    }
+    public class ExcelWaybillPrinter : IWaybillPrinter
+    {
+        public void Print() => Console.WriteLine("Printing waybill in Excel format...");
+    }
+    public class WordWaybillPrinter : IWaybillPrinter
+    {
+        public void Print() => Console.WriteLine("Printing waybill in Word format...");
+    }
+
+    #endregion
 }

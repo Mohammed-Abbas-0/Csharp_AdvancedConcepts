@@ -5,4 +5,9 @@
         void Deliver();
     }
 
+    public interface IWaybillPrinter
+    {
+        void Print();
+    }
+
 }
