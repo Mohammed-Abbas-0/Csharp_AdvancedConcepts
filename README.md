@@ -95,7 +95,6 @@ Dependency Injection (optional in some examples)
 
 Clone the repository:
 
-git clone https://github.com/your-username/DesignPatterns.git
 cd DesignPatterns
 
 
