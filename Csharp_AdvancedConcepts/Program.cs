@@ -71,6 +71,12 @@ light.Deliver();
 */
 
 
+
+/// <summary>
+/// Builder Pattern Example
+/// Use the PizzaBuilder to create a Pizza object step by step.
+/// </summary>
+
 using Csharp_AdvancedConcepts.DesignPattern.Builder;
 
 Console.WriteLine("Building a Pizza using Builder Pattern...");
