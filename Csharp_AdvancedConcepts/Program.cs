@@ -1,4 +1,4 @@
-﻿//using Csharp_AdvancedConcepts.DesignPattern.FactoryMethod;
+﻿using Csharp_AdvancedConcepts.DesignPattern.Singleton;
 
 //// Transport Factory Usage
 //var factory = new TransportFactory();
@@ -71,12 +71,14 @@ light.Deliver();
 */
 
 
+#region Builder Pattern Example
 
 /// <summary>
 /// Builder Pattern Example
 /// Use the PizzaBuilder to create a Pizza object step by step.
 /// </summary>
-
+//
+/*
 using Csharp_AdvancedConcepts.DesignPattern.Builder;
 
 Console.WriteLine("Building a Pizza using Builder Pattern...");
@@ -105,3 +107,32 @@ var pizza = new PizzaBuilder()
 
 Console.WriteLine("\nPizza Details:");
 Console.WriteLine($"Size: {pizza.Size} && Crust: {pizza.Crust} && takeAway: {(pizza.TakeAway == true ? "Yes" : "No")}");
+*/
+//
+#endregion
+
+#region Singleton Pattern Example
+
+Console.WriteLine("--- Singleton Pattern Example ---");
+
+// Accessing the instance for the first time
+Console.WriteLine("Accessing Instance 1...");
+var instance1 = Singleton.Instance;
+instance1.DoSomething();
+
+// Accessing the instance for the second time
+Console.WriteLine("Accessing Instance 2...");
+var instance2 = Singleton.Instance;
+instance2.DoSomething();
+
+// Verifying that both variables point to the same instance
+if (ReferenceEquals(instance1, instance2))
+{
+    Console.WriteLine("Result: Both variables contain the same instance.");
+}
+else
+{
+    Console.WriteLine("Result: Variables contain different instances (Error).");
+}
+
+#endregion
