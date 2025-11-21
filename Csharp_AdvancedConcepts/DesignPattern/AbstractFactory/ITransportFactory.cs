@@ -13,7 +13,7 @@ namespace Csharp_AdvancedConcepts.DesignPattern.AbstractFactory
         public ITransport CreateHeavyTransport() => new TruckTransport();
         public ITransport CreateLightTransport() => new CourierTransport();
     }
-    public class InternationalTransportFactory : ITransportFactory
+    public class InternationalTransportFactory : ITransportFactory 
     {
         public ITransport CreateHeavyTransport() => new SeaTransport();
         public ITransport CreateLightTransport() => new AirTransport();
