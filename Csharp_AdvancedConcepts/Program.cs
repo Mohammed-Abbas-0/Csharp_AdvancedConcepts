@@ -1,4 +1,5 @@
-﻿using Csharp_AdvancedConcepts.DesignPattern.Singleton;
+﻿using Csharp_AdvancedConcepts.DesignPattern.Creational_Design;
+using Csharp_AdvancedConcepts.DesignPattern.Singleton;
 
 //// Transport Factory Usage
 //var factory = new TransportFactory();
@@ -135,4 +136,16 @@ else
     Console.WriteLine("Result: Variables contain different instances (Error).");
 }
 
+#endregion
+
+#region Abstract Factory Pattern Example
+// Choose Environment
+INotificationFactory envFactory = new StagingNotificationFactory();
+// Or: new ProductionNotificationFactory();
+// Or: new DevNotificationFactory();
+
+// Choose the specific Notification type
+var notification = NotificationFactoryMethod.CreateNotification(NotificationType.Email, envFactory);
+
+notification.Send("Hello from Design Patterns!");
 #endregion
