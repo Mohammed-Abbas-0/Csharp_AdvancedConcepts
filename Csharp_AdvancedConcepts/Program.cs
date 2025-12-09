@@ -1,7 +1,10 @@
 ﻿using Csharp_AdvancedConcepts.DesignPattern.Creational_Design;
 using Csharp_AdvancedConcepts.DesignPattern.Singleton;
 using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Decorator;
+using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Facade.Data;
 
+
+/*
 //// Transport Factory Usage
 //var factory = new TransportFactory();
 
@@ -48,8 +51,7 @@ using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Decorator;
 //}
 
 //Console.ReadLine();
-
-
+*/
 
 /*
 
@@ -113,6 +115,7 @@ Console.WriteLine($"Size: {pizza.Size} && Crust: {pizza.Crust} && takeAway: {(pi
 //
 #endregion
 
+/*
 #region Singleton Pattern Example
 
 Console.WriteLine("--- Singleton Pattern Example ---");
@@ -138,7 +141,9 @@ else
 }
 
 #endregion
+*/
 
+/*
 #region Abstract Factory Pattern Example
 // Choose Environment
 INotificationFactory envFactory = new StagingNotificationFactory();
@@ -150,7 +155,9 @@ var notification = NotificationFactoryMethod.CreateNotification(NotificationType
 
 notification.Send("Hello from Design Patterns!");
 #endregion
+*/
 
+/*
 #region Decorator Pattern Example
 var notificationEmail = new EmailNotificationConcrete();
 Console.WriteLine("\n--- Basic Email Notification ---");
@@ -158,5 +165,24 @@ notificationEmail.Send("This is a basic email notification.");
 var decoratedNotification = new SMSDecorator(notificationEmail);
 Console.WriteLine("\n--- Decorated Notification (Email + SMS) ---");
 decoratedNotification.Send("This is a decorated notification with SMS.");
+
+#endregion
+
+*/
+
+
+#region Facade Pattern Example
+
+using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Facade.FacadePattern;
+
+ICheckoutFacade checkoutFacade = new CheckoutFacade();
+var order = OrderData.Orders.FirstOrDefault();
+var result = checkoutFacade.ProcessOrder(order!);
+
+if (result.IsSuccessful)
+    Console.WriteLine("Order placed successfully!");
+else
+    Console.WriteLine("Order failed: " + result.ErrorMessage);
+
 
 #endregion
