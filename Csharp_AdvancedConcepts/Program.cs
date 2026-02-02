@@ -171,6 +171,7 @@ decoratedNotification.Send("This is a decorated notification with SMS.");
 */
 
 
+/*
 #region Facade Pattern Example
 
 using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Facade.FacadePattern;
@@ -185,4 +186,277 @@ else
     Console.WriteLine("Order failed: " + result.ErrorMessage);
 
 
+#endregion
+*/
+
+#region Adapter Pattern Example
+
+using Csharp_AdvancedConcepts.DesignPattern.Structural_Patterns.Adapter;
+using System;
+using DataLogic.Entities;
+using DataLogic.Enum;
+using DataLogic.StaticData;
+using DataLogic.FilterSystem;
+
+AdapterDemo.Run();
+
+#endregion
+
+
+#region Expression && Refliection Example
+Console.WriteLine("╔══════════════════════════════════════════╗");
+Console.WriteLine("║   Dynamic Filter System - Test Suite    ║");
+Console.WriteLine("╔══════════════════════════════════════════╗\n");
+
+// Test 1: Basic Equals
+Test1_BasicEquals();
+/*
+// Test 2: Price Greater Than
+Test2_PriceGreaterThan();
+
+// Test 3: Price Less Than
+Test3_PriceLessThan();
+
+// Test 4: String Contains
+Test4_StringContains();
+
+// Test 5: String StartsWith
+Test5_StringStartsWith();
+
+// Test 6: String EndsWith
+Test6_StringEndsWith();
+
+// Test 7: Multiple Conditions (AND)
+Test7_MultipleConditions();
+
+// Test 8: InStock Filter
+Test8_InStockFilter();
+
+// Test 9: Date Filtering
+Test9_DateFiltering();
+
+// Test 10: Complex Query
+Test10_ComplexQuery();
+*/
+
+var f = new FilterBuilder<Product>();
+var expression = f.BuildGreater("Price", 500.0);
+var results = SeedData.Products.AsQueryable().Where(expression).ToList();
+foreach (var p in results)
+{
+    Console.WriteLine($"  ✓ {p.Name} - {p.Price:C}");
+}
+
+Console.WriteLine("\n╔══════════════════════════════════════════╗");
+Console.WriteLine("║         All Tests Completed! ✓           ║");
+Console.WriteLine("╚══════════════════════════════════════════╝");
+static void Test1_BasicEquals()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 1: Basic Equals - Category Electronics");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.CategoryId), FilterOperation.Equals, 1);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - {p.Price:C} (CategoryId: {p.CategoryId})");
+    }
+    Console.WriteLine();
+}
+/*
+static void Test2_PriceGreaterThan()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 2: Price Greater Than 500");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.Price), FilterOperation.GreaterThan, 500m);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - {p.Price:C}");
+    }
+    Console.WriteLine();
+}
+
+static void Test3_PriceLessThan()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 3: Price Less Than 100");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.Price), FilterOperation.LessThan, 100m);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - {p.Price:C}");
+    }
+    Console.WriteLine();
+}
+
+static void Test4_StringContains()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 4: Name Contains 'top'");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.Name), FilterOperation.Contains, "top");
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name}");
+    }
+    Console.WriteLine();
+}
+
+static void Test5_StringStartsWith()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 5: Name Starts With 'S'");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.Name), FilterOperation.StartsWith, "S");
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name}");
+    }
+    Console.WriteLine();
+}
+
+static void Test6_StringEndsWith()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 6: Name Ends With 'Chair'");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.Name), FilterOperation.EndsWith, "Chair");
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name}");
+    }
+    Console.WriteLine();
+}
+
+static void Test7_MultipleConditions()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 7: Electronics AND Price > 600");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.CategoryId), FilterOperation.Equals, 1)
+        .AddCondition(nameof(Product.Price), FilterOperation.GreaterThan, 600m);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - {p.Price:C} (Cat: {p.CategoryId})");
+    }
+    Console.WriteLine();
+}
+
+static void Test8_InStockFilter()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 8: Products In Stock");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.InStock), FilterOperation.Equals, true);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - In Stock: {p.InStock}");
+    }
+    Console.WriteLine();
+}
+
+static void Test9_DateFiltering()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 9: Products Created in Last 7 Days");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var sevenDaysAgo = DateTime.UtcNow.AddDays(-7);
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.CreatedDate), FilterOperation.GreaterThan, sevenDaysAgo);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name} - Created: {p.CreatedDate:yyyy-MM-dd}");
+    }
+    Console.WriteLine();
+}
+
+static void Test10_ComplexQuery()
+{
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    Console.WriteLine("Test 10: Complex Query");
+    Console.WriteLine("(In Stock AND Price < 1000 AND Electronics)");
+    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    var filter = new FilterBuilder<Product>()
+        .AddCondition(nameof(Product.InStock), FilterOperation.Equals, true)
+        .AddCondition(nameof(Product.Price), FilterOperation.LessThan, 1000m)
+        .AddCondition(nameof(Product.CategoryId), FilterOperation.Equals, 1);
+
+    var expression = filter.Build();
+    var products = SeedData.Products.AsQueryable().Where(expression).ToList();
+
+    Console.WriteLine($"Found {products.Count} products:");
+    foreach (var p in products)
+    {
+        Console.WriteLine($"  ✓ {p.Name}");
+        Console.WriteLine($"    Price: {p.Price:C}");
+        Console.WriteLine($"    In Stock: {p.InStock}");
+        Console.WriteLine($"    Category: {p.CategoryId}");
+    }
+    Console.WriteLine();
+}
+*/
 #endregion
