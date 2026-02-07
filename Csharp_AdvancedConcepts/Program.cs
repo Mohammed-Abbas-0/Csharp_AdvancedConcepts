@@ -198,6 +198,24 @@ using DataLogic.Enum;
 using DataLogic.StaticData;
 using DataLogic.FilterSystem;
 
+
+
+var product = new ProductValid() { Name = "a",Price = 500 };
+var result = ValidHelper<ProductValid>.Validate(product);
+if (!result.IsValid)
+{
+    Console.WriteLine("Validation Failed:");
+    foreach (var error in result.Errors)
+    {
+        Console.WriteLine($"  - {error.PropertyName}: {error.Message}");
+    }
+}
+else
+{
+    Console.WriteLine("✓ Valid!");
+}
+
+
 AdapterDemo.Run();
 
 #endregion

@@ -1,5 +1,8 @@
 ﻿using DataLogic.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DataLogic.FilterSystem;
 public class FilterBuilder<T>
@@ -70,4 +73,65 @@ public class FilterBuilder<T>
         var greaterExp = Expression.GreaterThan(member, constant);
         return Expression.Lambda<Func<T, bool>>(greaterExp, paramter);
     }
+
+
+
+}
+
+public static class ValidHelper<T>
+{
+    private static List<ValidationRule<T>> _rules = new();
+
+    static List<Error> errors = new();
+    public static ValidationResult Validate(T entity)
+    {
+        var result = new ValidationResult();
+        var properties = typeof(T).GetProperties();
+
+        foreach (var prop in properties)
+        {
+            var value = prop.GetValue(entity);
+
+            // Check MinLength
+            var minLengthAttr = prop.GetCustomAttribute<MinLengthAttribute>();
+            if (minLengthAttr != null)
+            {
+                if (value == null || (value is string str && str.Length < minLengthAttr.Length))
+                {
+                    result.Errors.Add(new Error
+                    {
+                        PropertyName = prop.Name,
+                        Message = $"{prop.Name} must be at least {minLengthAttr.Length} characters"
+                    });
+                }
+            }
+        }
+        return result;
+    }
+    public static void AddRule(Expression<Func<T, bool>> condition, string errorMessage)
+    {
+        _rules.Add(new ValidationRule<T>
+        {
+            Condition = condition,
+            ErrorMessage = errorMessage
+        });
+    }
+}
+public class ProductValid
+{
+    [MinLength(3)]
+    public required string Name { get; set; }
+    public int Price { get; set; }
+}
+
+public class ValidationResult
+{
+    public bool IsValid => !Errors.Any();
+    public List<Error> Errors { get; set; } = new();
+}
+
+public class Error
+{
+    public required string Message { get; set; }
+    public required string PropertyName { get; set; }
 }
